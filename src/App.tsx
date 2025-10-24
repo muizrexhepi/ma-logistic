@@ -1,735 +1,696 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Truck,
   Package,
   MapPin,
   Phone,
   Mail,
-  Calculator,
-  CheckCircle,
   Menu,
   X,
-  ArrowRight,
-  Clock,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Plane,
+  Zap,
   Shield,
-  Globe,
+  FileText,
+  Box,
 } from "lucide-react";
 
-// Types
-interface CalculatorFormData {
-  pickup: string;
-  destination: string;
-  weight: number;
-}
-
-interface ContactFormData {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-}
-
-const App: React.FC = () => {
+const App = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [calculatorData, setCalculatorData] = useState<CalculatorFormData>({
-    pickup: "",
-    destination: "",
-    weight: 0,
-  });
-  const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null);
-  const [estimatedDistance, setEstimatedDistance] = useState<number | null>(
-    null
-  );
-  const [contactForm, setContactForm] = useState<ContactFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollTop;
-      const windowHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scroll = (totalScroll / windowHeight) * 100;
-      setScrollProgress(scroll);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [openFaq, setOpenFaq] = useState(0);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: "smooth" });
+    const headerOffset = 80;
+    const elementPosition = element?.getBoundingClientRect().top ?? 0;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
     setMobileMenuOpen(false);
   };
 
-  const calculatePrice = (e: React.FormEvent) => {
-    e.preventDefault();
-    const distance = Math.floor(Math.random() * 290) + 10;
-    const basePrice = 10;
-    const pricePerKm = 1.2;
-    const weightSurcharge =
-      calculatorData.weight > 50 ? (calculatorData.weight - 50) * 0.5 : 0;
-    const total = basePrice + distance * pricePerKm + weightSurcharge;
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      position: "CEO TechGear Solutions",
+      quote:
+        "As a business owner, reliability is everything. MA Logistic has been our trusted logistics partner for years, ensuring our shipments across Germany arrive on time and in perfect condition. Their professionalism and attention to detail have truly set them apart.",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+    },
+    {
+      name: "Michael Chen",
+      position: "Operations Director Global Trade Co",
+      quote:
+        "MA Logistic has transformed our supply operations. Their transparent pricing and reliable service across Germany have saved us both time and money. I highly recommend them to any business looking for a dependable logistics partner.",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+    },
+  ];
 
-    setEstimatedDistance(distance);
-    setEstimatedPrice(Math.round(total * 100) / 100);
-  };
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setContactForm({ name: "", email: "", phone: "", message: "" });
-    }, 3000);
-  };
+  const faqs = [
+    {
+      question: "What types of freight services do you offer?",
+      answer:
+        "We provide comprehensive freight services across Germany, including air, express, and land transportation, as well as warehousing and cargo insurance.",
+    },
+    {
+      question: "How do I track my shipment?",
+      answer:
+        "You can track your shipment in real-time through our online tracking system using your unique tracking number provided at booking.",
+    },
+    {
+      question: "Do you offer international shipping?",
+      answer:
+        "Currently, we specialize in nationwide delivery across Germany, providing the most reliable and efficient service within the country.",
+    },
+    {
+      question: "How can I request a shipping quote?",
+      answer:
+        "You can request a quote through our online calculator, by contacting us via phone, or by filling out our contact form with your shipment details.",
+    },
+  ];
 
   return (
     <div className="bg-white text-gray-900">
-      {/* Scroll Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
-        <div
-          className="h-full bg-yellow-400 transition-all duration-300"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-black bg-opacity-95 backdrop-blur-sm z-40 border-b border-yellow-400">
+      {/* Header */}
+      <nav className="absolute top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Truck className="text-yellow-400 w-8 h-8" />
-              <span className="text-white text-xl font-bold">MA Logistic</span>
+          <div className="flex justify-between items-center h-20">
+            <div
+              className="flex items-center space-x-3 cursor-pointer"
+              onClick={() => scrollToSection("home")}
+            >
+              <span className="text-2xl font-bold text-white">MA Logistic</span>
             </div>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              <button
-                onClick={() => scrollToSection("home")}
-                className="text-white hover:text-yellow-400 transition"
+            <div className="hidden md:flex items-center space-x-8">
+              <a
+                href="#home"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("home");
+                }}
+                className="text-white hover:text-white/90 transition"
               >
                 Home
-              </button>
-              <button
-                onClick={() => scrollToSection("about")}
-                className="text-white hover:text-yellow-400 transition"
+              </a>
+              <a
+                href="#solutions"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("solutions");
+                }}
+                className="text-white hover:text-white/90 transition"
               >
-                About
-              </button>
-              <button
-                onClick={() => scrollToSection("services")}
-                className="text-white hover:text-yellow-400 transition"
+                Solutions
+              </a>
+              <a
+                href="#use-cases"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("use-cases");
+                }}
+                className="text-white hover:text-white/90 transition"
               >
-                Services
-              </button>
-              <button
-                onClick={() => scrollToSection("calculator")}
-                className="text-white hover:text-yellow-400 transition"
+                Use Cases
+              </a>
+              <a
+                href="#testimonials"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("testimonials");
+                }}
+                className="text-white hover:text-white/90 transition"
               >
-                Calculator
-              </button>
+                Testimonials
+              </a>
+              <a
+                href="#pricing"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("pricing");
+                }}
+                className="text-white hover:text-white/90 transition"
+              >
+                Pricings
+              </a>
               <button
                 onClick={() => scrollToSection("contact")}
-                className="text-white hover:text-yellow-400 transition"
+                className="bg-white text-gray-900 px-5 py-2.5 rounded-lg hover:bg-white/90 transition text-sm font-medium"
               >
-                Contact
+                Contact Us
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X /> : <Menu />}
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-black border-t border-yellow-400">
+          <div className="md:hidden bg-white border-t">
             <div className="px-4 py-4 space-y-3">
-              <button
-                onClick={() => scrollToSection("home")}
-                className="block text-white hover:text-yellow-400 transition"
+              <a
+                href="#home"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("home");
+                }}
+                className="block text-gray-600 hover:text-gray-900 py-2"
               >
                 Home
-              </button>
-              <button
-                onClick={() => scrollToSection("about")}
-                className="block text-white hover:text-yellow-400 transition"
+              </a>
+              <a
+                href="#solutions"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("solutions");
+                }}
+                className="block text-gray-600 hover:text-gray-900 py-2"
               >
-                About
-              </button>
-              <button
-                onClick={() => scrollToSection("services")}
-                className="block text-white hover:text-yellow-400 transition"
+                Solutions
+              </a>
+              <a
+                href="#use-cases"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("use-cases");
+                }}
+                className="block text-gray-600 hover:text-gray-900 py-2"
               >
-                Services
-              </button>
-              <button
-                onClick={() => scrollToSection("calculator")}
-                className="block text-white hover:text-yellow-400 transition"
+                Use Cases
+              </a>
+              <a
+                href="#testimonials"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("testimonials");
+                }}
+                className="block text-gray-600 hover:text-gray-900 py-2"
               >
-                Calculator
-              </button>
+                Testimonials
+              </a>
+              <a
+                href="#pricing"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("pricing");
+                }}
+                className="block text-gray-600 hover:text-gray-900 py-2"
+              >
+                Pricings
+              </a>
               <button
                 onClick={() => scrollToSection("contact")}
-                className="block text-white hover:text-yellow-400 transition"
+                className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
               >
-                Contact
+                Contact Us
               </button>
             </div>
           </div>
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section
-        id="home"
-        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden pt-16"
-      >
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-400 rounded-full blur-3xl animate-pulse" />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-400 rounded-full blur-3xl"
-            style={{ animationDelay: "1s" }}
-          />
-        </div>
+      {/* Hero Section - Full Screen Fixed Image */}
+      <section id="home" className="relative h-screen flex items-center pt-12">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&h=1080&fit=crop')",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/50 to-transparent" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 bg-yellow-400/20 bg-opacity-10 border border-yellow-400 rounded-full px-4 py-2 mb-8">
-            <MapPin className="w-4 h-4 text-yellow-400" />
-            <span className="text-yellow-400 text-sm font-semibold">
-              Hamburg, Germany
-            </span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            MA <span className="text-yellow-400">Logistic</span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
-            Reliable Cargo & Delivery Services from Hamburg to Anywhere in
-            Europe
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => scrollToSection("calculator")}
-              className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-500 transition transform hover:scale-105 flex items-center justify-center space-x-2"
-            >
-              <Calculator className="w-5 h-5" />
-              <span>Get an Estimate</span>
-            </button>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-3xl">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Freight Solutions
+              <br />
+              With On-Time
+              <br />
+              Deliveries in Germany
+            </h1>
+            <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl leading-relaxed">
+              MA Logistic offers a full range of freight services across
+              Germany, ensuring reliable, cost-effective, and on-time deliveries
+              tailored to meet the unique needs of your business.
+            </p>
             <button
               onClick={() => scrollToSection("contact")}
-              className="bg-transparent border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-400 hover:text-black transition transform hover:scale-105 flex items-center justify-center space-x-2"
+              className="bg-white text-gray-900 px-8 py-4 rounded-xl hover:bg-gray-100 transition font-semibold text-lg shadow-lg"
             >
-              <span>Contact Us</span>
-              <ArrowRight className="w-5 h-5" />
+              Get a Quote
             </button>
           </div>
         </div>
-
-        {/* Animated Truck */}
-        <div className="absolute bottom-10 left-0 right-0 overflow-hidden">
-          <Truck
-            className="text-yellow-400 opacity-20 w-16 h-16 animate-bounce"
-            style={{ marginLeft: "10%" }}
-          />
-        </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      {/* Who We Are */}
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
-              About <span className="text-yellow-400">MA Logistic</span>
-            </h2>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto" />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                MA Logistic is a Hamburg-based cargo company offering fast and
-                secure delivery services across Europe. We partner with Deutsche
-                Post and handle private deliveries with transparent
-                per-kilometer pricing.
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Our commitment to precision, reliability, and customer
-                satisfaction has made us a trusted partner for businesses and
-                individuals throughout Germany and neighboring EU countries.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center space-x-2 bg-yellow-50 px-4 py-2 rounded-lg">
-                  <Shield className="w-5 h-5 text-yellow-600" />
-                  <span className="font-semibold">Insured Deliveries</span>
-                </div>
-                <div className="flex items-center space-x-2 bg-yellow-50 px-4 py-2 rounded-lg">
-                  <Clock className="w-5 h-5 text-yellow-600" />
-                  <span className="font-semibold">On-Time Guarantee</span>
-                </div>
-                <div className="flex items-center space-x-2 bg-yellow-50 px-4 py-2 rounded-lg">
-                  <Globe className="w-5 h-5 text-yellow-600" />
-                  <span className="font-semibold">EU-Wide Coverage</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gradient-to-br from-black to-gray-800 p-6 rounded-xl text-center transform hover:scale-105 transition">
-                <Package className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-white font-bold text-xl mb-2">Pickup</h3>
-                <p className="text-gray-400 text-sm">We collect your cargo</p>
-              </div>
-              <div className="bg-gradient-to-br from-black to-gray-800 p-6 rounded-xl text-center transform hover:scale-105 transition">
-                <Truck className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-white font-bold text-xl mb-2">Transport</h3>
-                <p className="text-gray-400 text-sm">
-                  Safe journey across Europe
-                </p>
-              </div>
-              <div className="bg-gradient-to-br from-black to-gray-800 p-6 rounded-xl text-center transform hover:scale-105 transition">
-                <MapPin className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-white font-bold text-xl mb-2">Delivery</h3>
-                <p className="text-gray-400 text-sm">
-                  Precise destination drop-off
-                </p>
-              </div>
-              <div className="bg-gradient-to-br from-black to-gray-800 p-6 rounded-xl text-center transform hover:scale-105 transition">
-                <CheckCircle className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-white font-bold text-xl mb-2">Confirm</h3>
-                <p className="text-gray-400 text-sm">Delivery verification</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
-              Our <span className="text-yellow-400">Services</span>
-            </h2>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto" />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Partner Deliveries */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border-t-4 border-yellow-400">
-              <div className="bg-yellow-400 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <Package className="w-8 h-8 text-black" />
-              </div>
-              <h3 className="text-2xl font-bold text-black mb-4">
-                Partner Deliveries
-              </h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Seamless integration with Deutsche Post and trusted logistics
-                partners across Europe. We handle your packages with care
-                through our established network, ensuring reliable and
-                cost-effective delivery solutions.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-start space-x-2">
-                  <CheckCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">
-                    Deutsche Post partnership
-                  </span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <CheckCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Standardized pricing</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <CheckCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">
-                    Extensive delivery network
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Private Deliveries */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition transform hover:scale-105 border-t-4 border-yellow-400">
-              <div className="bg-black w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <Truck className="w-8 h-8 text-yellow-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-black mb-4">
-                Private Deliveries
-              </h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Direct cargo transport tailored to your specific needs. Our
-                private delivery service offers transparent per-kilometer
-                pricing, giving you full control and flexibility for specialized
-                shipments.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-start space-x-2">
-                  <CheckCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">
-                    €1.20 per kilometer pricing
-                  </span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <CheckCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Direct cargo transport</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <CheckCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Flexible scheduling</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Calculator Section */}
-      <section
-        id="calculator"
-        className="py-20 bg-gradient-to-br from-black via-gray-900 to-black"
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Price <span className="text-yellow-400">Calculator</span>
-            </h2>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto mb-4" />
-            <p className="text-gray-300 text-lg">
-              Get an instant estimate for your delivery
+          <div className="text-center mb-20">
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+              Who We Are
             </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight max-w-5xl mx-auto">
+              We are a trusted freight and logistics company in Germany,
+              delivering timely, secure, and cost-effective solutions for
+              businesses of all sizes nationwide.
+            </h2>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-2xl p-8">
-            <div className="space-y-6">
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Pickup Location
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Hamburg, Germany"
-                  value={calculatorData.pickup}
-                  onChange={(e) =>
-                    setCalculatorData({
-                      ...calculatorData,
-                      pickup: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition"
-                />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            <div className="text-center">
+              <div className="text-6xl md:text-7xl font-bold text-gray-900 mb-3">
+                99%
               </div>
-
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Delivery Destination
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Berlin, Germany"
-                  value={calculatorData.destination}
-                  onChange={(e) =>
-                    setCalculatorData({
-                      ...calculatorData,
-                      destination: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition"
-                />
+              <div className="text-gray-600 text-sm">On-Time Delivery Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-6xl md:text-7xl font-bold text-gray-900 mb-3">
+                92%
               </div>
-
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Weight (kg)
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="e.g., 25"
-                  value={calculatorData.weight || ""}
-                  onChange={(e) =>
-                    setCalculatorData({
-                      ...calculatorData,
-                      weight: Number(e.target.value),
-                    })
-                  }
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition"
-                />
+              <div className="text-gray-600 text-sm">Customer Satisfaction</div>
+            </div>
+            <div className="text-center">
+              <div className="text-6xl md:text-7xl font-bold text-gray-900 mb-3">
+                87%
               </div>
+              <div className="text-gray-600 text-sm">Cargo Safety Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-6xl md:text-7xl font-bold text-gray-900 mb-3">
+                93%
+              </div>
+              <div className="text-gray-600 text-sm">Client Retention Rate</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Solutions Section */}
+      <section id="solutions" className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
+                Reliable solutions
+                <br />
+                to streamline your
+                <br />
+                supply chain in Germany
+              </h2>
               <button
-                onClick={calculatePrice}
-                disabled={
-                  !calculatorData.pickup ||
-                  !calculatorData.destination ||
-                  !calculatorData.weight
-                }
-                className="w-full bg-yellow-400 text-black py-4 rounded-lg font-bold text-lg hover:bg-yellow-500 transition transform hover:scale-105 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => scrollToSection("contact")}
+                className="bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition font-semibold shadow-lg"
               >
-                <Calculator className="w-5 h-5" />
-                <span>Calculate Price</span>
+                Get a Quote
               </button>
             </div>
+            <div>
+              <img
+                src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=700&h=500&fit=crop"
+                alt="Delivery worker"
+                className="w-full h-[450px] object-cover rounded-2xl shadow-2xl"
+              />
+            </div>
+          </div>
 
-            {estimatedPrice !== null && (
-              <div className="mt-8 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-xl p-6">
-                <div className="text-center">
-                  <p className="text-black text-lg font-semibold mb-2">
-                    Estimated Price
-                  </p>
-                  <p className="text-black text-5xl font-bold mb-2">
-                    €{estimatedPrice}
-                  </p>
-                  <p className="text-gray-800 text-sm mb-4">
-                    for approximately {estimatedDistance} km distance
-                  </p>
-                  <button
-                    onClick={() => scrollToSection("contact")}
-                    className="bg-black text-yellow-400 px-6 py-3 rounded-lg font-bold hover:bg-gray-900 transition"
-                  >
-                    Book Delivery
-                  </button>
-                </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-10 rounded-2xl shadow-sm hover:shadow-lg transition">
+              <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+                <Plane className="w-7 h-7 text-gray-900" />
               </div>
-            )}
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Air Freight
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Fast and secure air freight solutions to ensure your goods reach
+                their destination on time across Germany.
+              </p>
+            </div>
+
+            <div className="bg-white p-10 rounded-2xl shadow-sm hover:shadow-lg transition">
+              <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+                <Zap className="w-7 h-7 text-gray-900" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Express Freight
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Fast and reliable express freight services for quick delivery
+                anywhere in Germany without compromising safety.
+              </p>
+            </div>
+
+            <div className="bg-white p-10 rounded-2xl shadow-sm hover:shadow-lg transition">
+              <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+                <Truck className="w-7 h-7 text-gray-900" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Land Freight
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Efficient land transportation for reliable nationwide deliveries
+                across Germany, ensuring the best rates.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      {/* Additional Services */}
+      <section id="use-cases" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
-              Get in <span className="text-yellow-400">Touch</span>
-            </h2>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto" />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-bold text-black mb-6">
-                Send us a message
+          <div className="grid md:grid-cols-3 gap-10">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Box className="w-10 h-10 text-gray-900" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Warehousing
               </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    value={contactForm.name}
-                    onChange={(e) =>
-                      setContactForm({ ...contactForm, name: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition"
-                  />
-                </div>
+              <p className="text-gray-600 leading-relaxed">
+                Flexible and secure storage for your goods, ensuring safe
+                handling and easy access.
+              </p>
+            </div>
 
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={contactForm.email}
-                    onChange={(e) =>
-                      setContactForm({ ...contactForm, email: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition"
-                  />
-                </div>
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <FileText className="w-10 h-10 text-gray-900" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Shipping Documents
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Expert handling of shipping documentation to ensure a smooth and
+                hassle-free delivery experience.
+              </p>
+            </div>
 
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    value={contactForm.phone}
-                    onChange={(e) =>
-                      setContactForm({ ...contactForm, phone: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition"
-                  />
-                </div>
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-10 h-10 text-gray-900" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Freight Insurance
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Comprehensive freight insurance to protect your goods against
+                any unforeseen risks during transit.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2">
-                    Message / Package Details
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={contactForm.message}
-                    onChange={(e) =>
-                      setContactForm({
-                        ...contactForm,
-                        message: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-400 focus:outline-none transition resize-none"
-                  />
-                </div>
+      {/* Testimonials */}
+      <section id="testimonials" className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-20 items-center">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                Why Businesses
+                <br />
+                Trust MA Logistic in Germany
+                <br />
+                For Their Freight
+              </h2>
+            </div>
 
+            <div className="relative">
+              <div className="flex justify-end mb-6 space-x-3">
                 <button
-                  onClick={handleContactSubmit}
-                  disabled={
-                    !contactForm.name ||
-                    !contactForm.email ||
-                    !contactForm.phone ||
-                    !contactForm.message
+                  onClick={() =>
+                    setActiveTestimonial(Math.max(0, activeTestimonial - 1))
                   }
-                  className="w-full bg-yellow-400 text-black py-4 rounded-lg font-bold text-lg hover:bg-yellow-500 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-12 h-12 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition shadow-sm"
+                  disabled={activeTestimonial === 0}
                 >
-                  Send Inquiry
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() =>
+                    setActiveTestimonial(
+                      Math.min(testimonials.length - 1, activeTestimonial + 1)
+                    )
+                  }
+                  className="w-12 h-12 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition shadow-sm"
+                  disabled={activeTestimonial === testimonials.length - 1}
+                >
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
 
-              {formSubmitted && (
-                <div className="mt-4 bg-green-100 border-2 border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center space-x-2">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">
-                    Message sent successfully!
-                  </span>
+              <div className="bg-white rounded-2xl p-8 md:p-10 shadow-lg">
+                <div className="flex items-start space-x-6 mb-8">
+                  <img
+                    src={testimonials[activeTestimonial].image}
+                    alt={testimonials[activeTestimonial].name}
+                    className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
+                  />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">
+                      {testimonials[activeTestimonial].name}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {testimonials[activeTestimonial].position}
+                    </p>
+                  </div>
                 </div>
-              )}
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  "{testimonials[activeTestimonial].quote}"
+                </p>
+              </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Contact Information */}
-            <div>
-              <div className="bg-gradient-to-br from-black to-gray-800 rounded-2xl p-8 text-white mb-6">
-                <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-4">
-                    <MapPin className="w-6 h-6 text-yellow-400 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold">Address</p>
-                      <p className="text-gray-300">Hamburg, Germany</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <Phone className="w-6 h-6 text-yellow-400 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold">Phone</p>
-                      <p className="text-gray-300">+49 40 1234 5678</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <Mail className="w-6 h-6 text-yellow-400 flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold">Email</p>
-                      <p className="text-gray-300">info@malogistic.de</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* FAQ Section */}
+      <section id="pricing" className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              Get All the Details
+              <br />
+              About Our Freight
+              <br />
+              Solutions in Germany
+            </h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Find answers to the most common questions about our freight
+              services and how MA Logistic can support your logistics needs
+              across Germany.
+            </p>
+          </div>
 
-              {/* Map */}
-              <div className="bg-gray-200 rounded-2xl overflow-hidden h-64">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d152513.47118168696!2d9.845035!3d53.550341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b161837e1813b9%3A0x4263df27bd63aa0!2sHamburg%2C%20Germany!5e0!3m2!1sen!2sus!4v1234567890"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  loading="lazy"
-                  title="MA Logistic Location"
-                />
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white border border-gray-200 rounded-xl overflow-hidden"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
+                  className="w-full px-8 py-6 flex items-center justify-between text-left hover:bg-gray-50 transition"
+                >
+                  <span className="text-lg font-semibold text-gray-900 pr-4">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`w-6 h-6 text-gray-600 flex-shrink-0 transition-transform ${
+                      openFaq === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {openFaq === index && (
+                  <div className="px-8 pb-6 pt-2">
+                    <p className="text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                )}
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
+              We are a trusted freight and
+              <br />
+              logistics company in Germany,
+              <br />
+              delivering timely and secure shipments.
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => scrollToSection("solutions")}
+                className="bg-transparent text-white px-8 py-4 rounded-xl hover:bg-white hover:text-gray-900 transition font-semibold border-2 border-white"
+              >
+                See Our Service
+              </button>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="bg-white text-gray-900 px-8 py-4 rounded-xl hover:bg-gray-100 transition font-semibold"
+              >
+                Get a Quote
+              </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-12 border-t-2 border-yellow-400">
+      <footer id="contact" className="bg-white py-16 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Truck className="text-yellow-400 w-8 h-8" />
-                <span className="text-xl font-bold">MA Logistic</span>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                  <Truck className="text-white w-6 h-6" strokeWidth={2.5} />
+                </div>
+                <span className="text-xl font-bold text-gray-900">
+                  MA Logistic
+                </span>
               </div>
-              <p className="text-gray-400">
-                Reliable cargo and delivery services from Hamburg to anywhere in
-                Europe.
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Reliable and efficient freight solutions across Germany,
+                simplifying and optimizing your supply chain with timely
+                deliveries.
               </p>
             </div>
 
             <div>
-              <h4 className="font-bold text-lg mb-4">Quick Links</h4>
-              <div className="space-y-2">
-                <button
-                  onClick={() => scrollToSection("home")}
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+              <h4 className="font-bold text-gray-900 mb-4 text-sm">
+                Navigation
+              </h4>
+              <div className="space-y-2.5">
+                <a
+                  href="#home"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("home");
+                  }}
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
                   Home
-                </button>
-                <button
-                  onClick={() => scrollToSection("services")}
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+                </a>
+                <a
+                  href="#solutions"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("solutions");
+                  }}
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
-                  Services
-                </button>
-                <button
-                  onClick={() => scrollToSection("calculator")}
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+                  Solutions
+                </a>
+                <a
+                  href="#use-cases"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("use-cases");
+                  }}
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
-                  Calculator
-                </button>
-                <button
-                  onClick={() => scrollToSection("contact")}
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+                  Case Study
+                </a>
+                <a
+                  href="#testimonials"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("testimonials");
+                  }}
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
-                  Contact
-                </button>
+                  Testimonials
+                </a>
               </div>
             </div>
 
             <div>
-              <h4 className="font-bold text-lg mb-4">Legal</h4>
-              <div className="space-y-2">
+              <h4 className="font-bold text-gray-900 mb-4 text-sm">About Us</h4>
+              <div className="space-y-2.5">
                 <a
                   href="#"
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
-                  Privacy Policy
+                  Career
                 </a>
                 <a
                   href="#"
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
+                >
+                  Blog
+                </a>
+                <a
+                  href="#"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
+                >
+                  Resources
+                </a>
+                <a
+                  href="#"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
+                >
+                  Become a Partner
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-bold text-gray-900 mb-4 text-sm">Legal</h4>
+              <div className="space-y-2.5">
+                <a
+                  href="#"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
                   Terms of Service
                 </a>
                 <a
                   href="#"
-                  className="block text-gray-400 hover:text-yellow-400 transition"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
                 >
-                  Imprint
+                  Agreement
+                </a>
+                <a
+                  href="#"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
+                >
+                  Privacy and Policy
+                </a>
+                <a
+                  href="#"
+                  className="block text-gray-600 hover:text-gray-900 text-sm"
+                >
+                  Licenses
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-800 pt-8 text-center">
-            <p className="text-gray-400">
-              © 2025 MA Logistic. All rights reserved.
-            </p>
+          <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center text-gray-600 text-sm">
+            <p>Copyright 2025. MA Logistic</p>
+            <p>All Rights Reserved</p>
           </div>
         </div>
       </footer>
