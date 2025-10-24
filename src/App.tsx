@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Truck,
-  Package,
-  MapPin,
-  Phone,
-  Mail,
   Menu,
   X,
   ChevronDown,
