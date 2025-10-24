@@ -1,0 +1,28 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  fill="none"
+>
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="#111827" />
+
+  <!-- MA Text -->
+  <text
+    x="50%"
+    y="42%"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="26"
+    font-weight="bold"
+    fill="white"
+  >
+    MA
+  </text>
+
+  <!-- Road Line -->
+  <rect x="12" y="45" width="40" height="4" rx="2" fill="white" />
+  <rect x="18" y="45" width="6" height="4" fill="#111827" />
+  <rect x="30" y="45" width="6" height="4" fill="#111827" />
+  <rect x="42" y="45" width="6" height="4" fill="#111827" />
+</svg>

@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Plane,
   Zap,
   Shield,
   FileText,
@@ -31,45 +30,55 @@ const App = () => {
     setMobileMenuOpen(false);
   };
 
+  // Testimonials (kept from your previous version)
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      position: "CEO TechGear Solutions",
+      name: "Anna Müller",
+      position: "Berlin",
       quote:
-        "As a business owner, reliability is everything. MA Logistic has been our trusted logistics partner for years, ensuring our shipments across Germany arrive on time and in perfect condition. Their professionalism and attention to detail have truly set them apart.",
+        "I ordered a fragile package from Munich to Berlin, and it arrived exactly on time — no damage, no stress. Everything was super smooth!",
       image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400&h=400&fit=crop",
     },
     {
-      name: "Michael Chen",
-      position: "Operations Director Global Trade Co",
+      name: "Thomas Becker",
+      position: "Hamburg",
       quote:
-        "MA Logistic has transformed our supply operations. Their transparent pricing and reliable service across Germany have saved us both time and money. I highly recommend them to any business looking for a dependable logistics partner.",
+        "I was worried about delays, but my delivery came earlier than expected. Tracking was easy and communication was great. Highly recommend!",
       image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=400&h=400&fit=crop",
+    },
+    {
+      name: "Laura Schneider",
+      position: "Frankfurt",
+      quote:
+        "Best delivery service I’ve used in Germany. No hassle, no waiting around — my package arrived safely and right on schedule.",
+      image:
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop",
     },
   ];
 
+  // FAQs
   const faqs = [
     {
       question: "What types of freight services do you offer?",
       answer:
-        "We provide comprehensive freight services across Germany, including air, express, and land transportation, as well as warehousing and cargo insurance.",
+        "We provide fast express delivery and reliable land freight across Germany. We also offer warehousing and freight insurance for extra peace of mind.",
     },
     {
       question: "How do I track my shipment?",
       answer:
-        "You can track your shipment in real-time through our online tracking system using your unique tracking number provided at booking.",
+        "You’ll receive a unique tracking number when you book. You can easily check where your package is in real-time on our website.",
     },
     {
       question: "Do you offer international shipping?",
       answer:
-        "Currently, we specialize in nationwide delivery across Germany, providing the most reliable and efficient service within the country.",
+        "Right now, we focus on nationwide delivery within Germany — ensuring the fastest and most reliable service possible.",
     },
     {
       question: "How can I request a shipping quote?",
       answer:
-        "You can request a quote through our online calculator, by contacting us via phone, or by filling out our contact form with your shipment details.",
+        "You can use our online calculator or simply contact us via phone or form. We'll get back to you quickly with a clear price.",
     },
   ];
 
@@ -87,56 +96,25 @@ const App = () => {
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
-              <a
-                href="#home"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("home");
-                }}
-                className="text-white hover:text-white/90 transition"
-              >
-                Home
-              </a>
-              <a
-                href="#solutions"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("solutions");
-                }}
-                className="text-white hover:text-white/90 transition"
-              >
-                Solutions
-              </a>
-              <a
-                href="#use-cases"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("use-cases");
-                }}
-                className="text-white hover:text-white/90 transition"
-              >
-                Use Cases
-              </a>
-              <a
-                href="#testimonials"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("testimonials");
-                }}
-                className="text-white hover:text-white/90 transition"
-              >
-                Testimonials
-              </a>
-              <a
-                href="#pricing"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("pricing");
-                }}
-                className="text-white hover:text-white/90 transition"
-              >
-                Pricings
-              </a>
+              {[
+                "home",
+                "solutions",
+                "use-cases",
+                "testimonials",
+                "pricing",
+              ].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item);
+                  }}
+                  className="text-white hover:text-white/90 transition capitalize"
+                >
+                  {item.replace("-", " ")}
+                </a>
+              ))}
               <button
                 onClick={() => scrollToSection("contact")}
                 className="bg-white text-gray-900 px-5 py-2.5 rounded-lg hover:bg-white/90 transition text-sm font-medium"
@@ -157,56 +135,25 @@ const App = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <div className="px-4 py-4 space-y-3">
-              <a
-                href="#home"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("home");
-                }}
-                className="block text-gray-600 hover:text-gray-900 py-2"
-              >
-                Home
-              </a>
-              <a
-                href="#solutions"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("solutions");
-                }}
-                className="block text-gray-600 hover:text-gray-900 py-2"
-              >
-                Solutions
-              </a>
-              <a
-                href="#use-cases"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("use-cases");
-                }}
-                className="block text-gray-600 hover:text-gray-900 py-2"
-              >
-                Use Cases
-              </a>
-              <a
-                href="#testimonials"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("testimonials");
-                }}
-                className="block text-gray-600 hover:text-gray-900 py-2"
-              >
-                Testimonials
-              </a>
-              <a
-                href="#pricing"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("pricing");
-                }}
-                className="block text-gray-600 hover:text-gray-900 py-2"
-              >
-                Pricings
-              </a>
+              {[
+                "home",
+                "solutions",
+                "use-cases",
+                "testimonials",
+                "pricing",
+              ].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item);
+                  }}
+                  className="block text-gray-600 hover:text-gray-900 py-2 capitalize"
+                >
+                  {item.replace("-", " ")}
+                </a>
+              ))}
               <button
                 onClick={() => scrollToSection("contact")}
                 className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
@@ -218,7 +165,7 @@ const App = () => {
         )}
       </nav>
 
-      {/* Hero Section - Full Screen Fixed Image */}
+      {/* Hero Section */}
       <section id="home" className="relative h-screen flex items-center pt-12">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -228,20 +175,19 @@ const App = () => {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/50 to-transparent" />
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Honest & Reliable
+              <br />
               Freight Solutions
               <br />
-              With On-Time
-              <br />
-              Deliveries in Germany
+              in Germany
             </h1>
             <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl leading-relaxed">
-              MA Logistic offers a full range of freight services across
-              Germany, ensuring reliable, cost-effective, and on-time deliveries
-              tailored to meet the unique needs of your business.
+              We're a new logistics company built on honesty and trust. No
+              shortcuts — just clear communication, fair pricing, and reliable
+              delivery across Germany.
             </p>
             <button
               onClick={() => scrollToSection("contact")}
@@ -261,9 +207,9 @@ const App = () => {
               Who We Are
             </p>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight max-w-5xl mx-auto">
-              We are a trusted freight and logistics company in Germany,
-              delivering timely, secure, and cost-effective solutions for
-              businesses of all sizes nationwide.
+              We’re new, but we’re serious about doing things right. Our mission
+              is to build a trusted logistics service in Germany — one delivery
+              at a time.
             </h2>
           </div>
 
@@ -302,12 +248,17 @@ const App = () => {
           <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
-                Reliable solutions
+                Building trust
                 <br />
-                to streamline your
+                through transparent
                 <br />
-                supply chain in Germany
+                logistics in Germany
               </h2>
+              <p className="text-gray-600 mb-6">
+                We don’t promise the impossible — we deliver what we say. Clear
+                pricing, reliable service, and honest communication every step
+                of the way.
+              </p>
               <button
                 onClick={() => scrollToSection("contact")}
                 className="bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition font-semibold shadow-lg"
@@ -324,20 +275,7 @@ const App = () => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-10 rounded-2xl shadow-sm hover:shadow-lg transition">
-              <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
-                <Plane className="w-7 h-7 text-gray-900" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Air Freight
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Fast and secure air freight solutions to ensure your goods reach
-                their destination on time across Germany.
-              </p>
-            </div>
-
+          <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white p-10 rounded-2xl shadow-sm hover:shadow-lg transition">
               <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-6">
                 <Zap className="w-7 h-7 text-gray-900" />
@@ -347,7 +285,7 @@ const App = () => {
               </h3>
               <p className="text-gray-600 leading-relaxed">
                 Fast and reliable express freight services for quick delivery
-                anywhere in Germany without compromising safety.
+                anywhere in Germany — no false promises, just real effort.
               </p>
             </div>
 
@@ -359,8 +297,8 @@ const App = () => {
                 Land Freight
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Efficient land transportation for reliable nationwide deliveries
-                across Germany, ensuring the best rates.
+                Efficient land transportation for nationwide deliveries across
+                Germany, done with care and full transparency.
               </p>
             </div>
           </div>
@@ -379,8 +317,8 @@ const App = () => {
                 Warehousing
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Flexible and secure storage for your goods, ensuring safe
-                handling and easy access.
+                Secure and flexible storage options to make your logistics
+                smoother from start to finish.
               </p>
             </div>
 
@@ -392,8 +330,8 @@ const App = () => {
                 Shipping Documents
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Expert handling of shipping documentation to ensure a smooth and
-                hassle-free delivery experience.
+                We handle your shipping documents with precision — no
+                unnecessary complexity, just clarity.
               </p>
             </div>
 
@@ -405,8 +343,8 @@ const App = () => {
                 Freight Insurance
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Comprehensive freight insurance to protect your goods against
-                any unforeseen risks during transit.
+                Optional freight insurance to keep your shipment protected every
+                step of the way.
               </p>
             </div>
           </div>
@@ -419,12 +357,14 @@ const App = () => {
           <div className="grid md:grid-cols-2 gap-20 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                Why Businesses
+                What Our Customers
                 <br />
-                Trust MA Logistic in Germany
-                <br />
-                For Their Freight
+                Say About Us
               </h2>
+              <p className="mt-4 text-gray-600 max-w-md">
+                We believe trust is earned through actions, not words. These are
+                real stories from happy customers.
+              </p>
             </div>
 
             <div className="relative">
@@ -481,16 +421,13 @@ const App = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              Get All the Details
+              Honest Answers to
               <br />
-              About Our Freight
-              <br />
-              Solutions in Germany
+              Common Questions
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Find answers to the most common questions about our freight
-              services and how MA Logistic can support your logistics needs
-              across Germany.
+              We keep things simple and clear. Here’s everything you need to
+              know before working with us.
             </p>
           </div>
 
@@ -504,20 +441,18 @@ const App = () => {
                   onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
                   className="w-full px-8 py-6 flex items-center justify-between text-left hover:bg-gray-50 transition"
                 >
-                  <span className="text-lg font-semibold text-gray-900 pr-4">
+                  <span className="text-lg font-semibold text-gray-900">
                     {faq.question}
                   </span>
                   <ChevronDown
-                    className={`w-6 h-6 text-gray-600 flex-shrink-0 transition-transform ${
+                    className={`w-5 h-5 text-gray-500 transition-transform ${
                       openFaq === index ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {openFaq === index && (
-                  <div className="px-8 pb-6 pt-2">
-                    <p className="text-gray-600 leading-relaxed">
-                      {faq.answer}
-                    </p>
+                  <div className="px-8 pb-6 text-gray-600 leading-relaxed">
+                    {faq.answer}
                   </div>
                 )}
               </div>
@@ -531,18 +466,18 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
-              We are a trusted freight and
+              We’re building something real.
               <br />
-              logistics company in Germany,
+              No false promises — just honest,
               <br />
-              delivering timely and secure shipments.
+              reliable service across Germany.
             </h2>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => scrollToSection("solutions")}
                 className="bg-transparent text-white px-8 py-4 rounded-xl hover:bg-white hover:text-gray-900 transition font-semibold border-2 border-white"
               >
-                See Our Service
+                See Our Services
               </button>
               <button
                 onClick={() => scrollToSection("contact")}
@@ -569,9 +504,9 @@ const App = () => {
                 </span>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Reliable and efficient freight solutions across Germany,
-                simplifying and optimizing your supply chain with timely
-                deliveries.
+                A new logistics company built on trust and transparency. No
+                shortcuts, no empty promises — just honest, reliable freight
+                solutions across Germany.
               </p>
             </div>
 
@@ -580,46 +515,21 @@ const App = () => {
                 Navigation
               </h4>
               <div className="space-y-2.5">
-                <a
-                  href="#home"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("home");
-                  }}
-                  className="block text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Home
-                </a>
-                <a
-                  href="#solutions"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("solutions");
-                  }}
-                  className="block text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Solutions
-                </a>
-                <a
-                  href="#use-cases"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("use-cases");
-                  }}
-                  className="block text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Case Study
-                </a>
-                <a
-                  href="#testimonials"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("testimonials");
-                  }}
-                  className="block text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Testimonials
-                </a>
+                {["home", "solutions", "use-cases", "testimonials"].map(
+                  (item) => (
+                    <a
+                      key={item}
+                      href={`#${item}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(item);
+                      }}
+                      className="block text-gray-600 hover:text-gray-900 text-sm capitalize"
+                    >
+                      {item.replace("-", " ")}
+                    </a>
+                  )
+                )}
               </div>
             </div>
 
@@ -685,7 +595,7 @@ const App = () => {
           </div>
 
           <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center text-gray-600 text-sm">
-            <p>Copyright 2025. MA Logistic</p>
+            <p>© 2025 MA Logistic</p>
             <p>All Rights Reserved</p>
           </div>
         </div>
